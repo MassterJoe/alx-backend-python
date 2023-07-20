@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
-""" approximate elapsed Measure the runtime"""
+""" Create a measure_time function with integers n and max_delay as arguments
+that measures the total execution time for wait_n(n, max_delay)"""
 from time import perf_counter
 import asyncio
 wait_n = __import__('1-concurrent_coroutines').wait_n
 
 
 def measure_time(n: int, max_delay: int) -> float:
-    """
-    integers n and max_delay as arguments
-    total execution time for wait_n(n, max_delay)
-    returns total_time / n.
-    """
-    start = perf_counter()
+    """ It measures the total execution time for wait_n(n, max_delay),
+    and returns total_time / n."""
+    start_time = perf_counter()
     asyncio.run(wait_n(n, max_delay))
-    elapsed = perf_counter() - start
-    return elapsed / n
+    stop_time = perf_counter()
+    total_time = stop_time - start_time
+    return total_time / n
