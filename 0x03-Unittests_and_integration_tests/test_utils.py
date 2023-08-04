@@ -11,7 +11,9 @@ from typing import (
     Sequence,
     Any
 )
-from utils import access_nested_map
+from utils import access_nested_map, get_json
+from unittest.mock import patch
+import requests
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -37,3 +39,19 @@ class TestAccessNestedMap(unittest.TestCase):
         """ to test for exceptions """
         with self.assertRaises(Exception):
             access_nested_map(nested_map, path)
+
+
+class TestGetJson(unittest.TestCase):
+    """ to test getJson class  """
+
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False})
+    ])
+    @patch("requests.get")
+    def test_get_json(self, test_url, test_payload, moke_get_requests):
+        """ test get_json """
+        moke_get_requests.return_value.json.return_value = test_payload
+        result = get_json(test_url)
+        self.assertEqual(result, test_payload)
+        moke_get_requests.assert_called_once_with(test_url)
